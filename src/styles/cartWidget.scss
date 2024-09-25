@@ -1,0 +1,37 @@
+.cart-widget {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  img {
+    width: 40px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .cart-count {
+    background-color: #ffeb3b;
+    border-radius: 50%;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    color: black;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+
+    img {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+
+    .cart-count {
+      background-color: #ffffff;
+      color: #000000;
+    }
+  }
+}
