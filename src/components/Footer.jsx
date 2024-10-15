@@ -4,15 +4,20 @@ import styles from "../styles/footer.module.scss";
 const Footer = () => {
   return (
     <footer className={styles.container}>
-      <span>Footer</span>
-      <a
-        href="https://github.com/spancavil/comision60050"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        Github
-      </a>
-      <p>Comisión 60050</p>
+      <div className={styles.content}>
+        <span className={styles.logo}>TiendaOnline</span>
+        <div className={styles.links}>
+          <a href="#" className={styles.link}>
+            Contacto
+          </a>
+          <a href="#" className={styles.link}>
+            Términos y condiciones
+          </a>
+        </div>
+      </div>
+      <p className={styles.credit}>
+        © {new Date().getFullYear()} Todos los derechos reservados.
+      </p>
     </footer>
   );
 };
