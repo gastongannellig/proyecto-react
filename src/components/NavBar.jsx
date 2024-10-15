@@ -1,21 +1,75 @@
-import React from "react";
-import "../styles/navbar.scss";
-import CartWidget from "./CartWidget";
+import React, { useState, useEffect } from "react";
+import styles from "../styles/navbar.module.scss";
+import title from "../styles/brand.module.scss";
+import { NavLink } from "react-router-dom";
+import CartWidget from "./cartWidget";
 import TitleLogo from "./titleLogo";
+import products from "../assets/mockData.json";
 
 const NavBar = () => {
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const uniqueCategories = [
+      ...new Set(products.map((product) => product.category)),
+    ];
+    setCategories(uniqueCategories);
+  }, []);
+
   return (
-    <nav className="navbar">
-      <TitleLogo />
-      <ul className="navbar-menu">
+    <nav className={styles.navbar}>
+      <NavLink to="/" className={title.logo}>
+        <TitleLogo />
+      </NavLink>
+      <ul className={styles.navbarmenu}>
         <li>
-          <a href="/">Inicio</a>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.isActive : styles.notActive
+            }
+            to={"/"}
+          >
+            Home
+          </NavLink>
+        </li>
+
+        <li className={styles.dropdown}>
+          <span className={styles.dropbtn}>Products</span>
+          <ul className={styles.dropdownContent}>
+            {categories.map((category) => (
+              <li key={category}>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? styles.isActive : styles.notActive
+                  }
+                  to={`/category/${category}`}
+                >
+                  {category}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </li>
+
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.isActive : styles.notActive
+            }
+            to={"/contact"}
+          >
+            Contact
+          </NavLink>
         </li>
         <li>
-          <a href="/shop">Tienda</a>
-        </li>
-        <li>
-          <a href="/contact">Contacto</a>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? styles.isActive : styles.notActive
+            }
+            to={"/about"}
+          >
+            About Us
+          </NavLink>
         </li>
       </ul>
       <CartWidget />
