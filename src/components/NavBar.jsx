@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import styles from "../styles/navbar.module.scss";
 import title from "../styles/brand.module.scss";
 import { NavLink } from "react-router-dom";
-import CartWidget from "./cartWidget";
-import TitleLogo from "./titleLogo";
+import CartWidget from "./CartWidget";
+import TitleLogo from "./TitleLogo";
 import products from "../assets/mockData.json";
 
 const NavBar = () => {

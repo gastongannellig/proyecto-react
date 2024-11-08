@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import styles from "../styles/itemCount.module.scss";
-import { toast } from "react-toastify";
+import styles from "../styles/itemcount.module.scss";
 
 const ItemCount = ({ stock, onAdd, productName }) => {
   const [count, setCount] = useState(1);
@@ -19,16 +18,6 @@ const ItemCount = ({ stock, onAdd, productName }) => {
 
   const handleAddToCart = () => {
     onAdd(count);
-    toast.success(`¡Añadiste ${count} ${productName} al carrito!`, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
     setCount(1);
   };
 
@@ -40,7 +29,7 @@ const ItemCount = ({ stock, onAdd, productName }) => {
         <button onClick={increment}>+</button>
       </div>
       <button className={styles.addToCartButton} onClick={handleAddToCart}>
-        Agregar al carrito
+        Add to cart
       </button>
     </div>
   );

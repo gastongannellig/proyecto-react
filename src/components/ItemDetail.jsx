@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import styles from "../styles/itemDetail.module.scss";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import styles from "../styles/itemdetail.module.scss";
 import ItemCount from "./ItemCount";
 
 const ItemDetail = ({ product }) => {
+  const [addedToCart, setAddedToCart] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const navigate = useNavigate();
+  const { addItemToCart } = useCart();
+
   if (!product) {
-    return <div>No se encontró el producto.</div>;
+    return <div>The product was not found.</div>;
   }
 
-  const handleAddToCart = (quantity) => {};
+  const handleAddToCart = (count) => {
+    addItemToCart(product, count);
+    setQuantity(count);
+    setAddedToCart(true);
+  };
+
+  const goToCart = () => {
+    navigate("/cart");
+  };
 
   return (
     <div className={styles.detailContainer}>
@@ -23,11 +36,18 @@ const ItemDetail = ({ product }) => {
         <h2 className={styles.title}>{product.title}</h2>
         <p className={styles.description}>{product.description}</p>
         <p className={styles.price}>{product.price}</p>
-        <ItemCount
-          stock={product.stock}
-          onAdd={handleAddToCart}
-          productName={product.title}
-        />
+
+        {!addedToCart ? (
+          <ItemCount
+            stock={product.stock}
+            onAdd={handleAddToCart}
+            productName={product.title}
+          />
+        ) : (
+          <button onClick={goToCart} className={styles.goToCartButton}>
+            Go to cart
+          </button>
+        )}
       </div>
     </div>
   );
@@ -35,6 +55,7 @@ const ItemDetail = ({ product }) => {
 
 ItemDetail.propTypes = {
   product: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     pictureUrl: PropTypes.string.isRequired,

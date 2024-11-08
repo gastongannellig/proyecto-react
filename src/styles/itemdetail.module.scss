@@ -40,3 +40,19 @@
   font-weight: bold;
   margin-top: 10px;
 }
+
+.goToCartButton {
+  margin-top: 20px;
+  padding: 12px 18px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #218838;
+  }
+}
