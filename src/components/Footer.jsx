@@ -8,15 +8,15 @@ const Footer = () => {
         <span className={styles.logo}>TuEshop</span>
         <div className={styles.links}>
           <a href="#" className={styles.link}>
-            Contacto
+            Contact
           </a>
           <a href="#" className={styles.link}>
-            Términos y condiciones
+            Terms and conditions
           </a>
         </div>
       </div>
       <p className={styles.credit}>
-        © {new Date().getFullYear()} Todos los derechos reservados.
+        © {new Date().getFullYear()} All rights reserved.
       </p>
     </footer>
   );

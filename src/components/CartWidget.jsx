@@ -1,7 +1,7 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import cart from "../assets/cart.svg";
-import styles from "../styles/cartwidget.module.scss"; // Asegúrate de importar los estilos
+import styles from "../styles/cartwidget.module.scss";
 import { Link } from "react-router-dom";
 
 const CartWidget = () => {
