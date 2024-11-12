@@ -1,49 +1,52 @@
 import React, { useEffect, useState } from "react";
-import mockProducts from "../assets/mockData.json";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase/config";
 import ItemList from "./ItemList";
-import { useParams } from "react-router-dom";
+import styles from "../styles/itemlistcontainer.module.scss";
 import PropagateLoader from "react-spinners/PropagateLoader";
-import "../styles/ItemListContainer.scss";
+import { useParams } from "react-router-dom";
 
 const ItemListContainer = () => {
-  const [products, setProducts] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const { categoryId } = useParams();
 
   useEffect(() => {
-    setLoading(true);
+    const fetchItems = async () => {
+      setLoading(true);
+      try {
+        const q = categoryId
+          ? query(
+              collection(db, "products"),
+              where("category", "==", categoryId)
+            )
+          : collection(db, "products");
+        const querySnapshot = await getDocs(q);
+        const products = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setItems(products);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const getProducts = new Promise((resolve) => {
-      setTimeout(() => {
-        let productsFiltered;
-        if (categoryId) {
-          productsFiltered = mockProducts.filter(
-            (product) => product.category === categoryId
-          );
-        } else {
-          productsFiltered = mockProducts;
-        }
-        resolve(productsFiltered);
-      }, 2000);
-    });
-
-    getProducts.then((result) => {
-      setProducts(result);
-      setLoading(false);
-    });
+    setTimeout(fetchItems, 1500);
   }, [categoryId]);
 
   return (
-    <>
+    <div className={styles.container}>
       {loading ? (
-        <div className="spinner-container">
-          <PropagateLoader color={"#36d7b7"} size={15} />
+        <div className={styles["spinner-container"]}>
+          <PropagateLoader color="#7defd8" size={20} speedMultiplier={1} />
         </div>
       ) : (
-        <ItemList products={products} />
+        <ItemList products={items} />
       )}
-    </>
+    </div>
   );
 };
 

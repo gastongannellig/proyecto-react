@@ -4,16 +4,26 @@ import title from "../styles/brand.module.scss";
 import { NavLink } from "react-router-dom";
 import CartWidget from "./CartWidget";
 import TitleLogo from "./TitleLogo";
-import products from "../assets/mockData.json";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const NavBar = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const uniqueCategories = [
-      ...new Set(products.map((product) => product.category)),
-    ];
-    setCategories(uniqueCategories);
+    const fetchCategories = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "products"));
+        const uniqueCategories = [
+          ...new Set(querySnapshot.docs.map((doc) => doc.data().category)),
+        ];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   return (

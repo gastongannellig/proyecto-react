@@ -1,7 +1,7 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
 import cart from "../assets/cart.svg";
-import "../styles/cartWidget.scss";
+import styles from "../styles/cartwidget.module.scss"; // Asegúrate de importar los estilos
 import { Link } from "react-router-dom";
 
 const CartWidget = () => {
@@ -10,9 +10,11 @@ const CartWidget = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <Link to="/cart" className="cart-widget">
+    <Link to="/cart" className={styles["cart-widget"]}>
       <img src={cart} alt="cart" />
-      {totalItems > 0 && <span className="cart-count">{totalItems}</span>}
+      {totalItems > 0 && (
+        <span className={styles["cart-count"]}>{totalItems}</span>
+      )}
     </Link>
   );
 };

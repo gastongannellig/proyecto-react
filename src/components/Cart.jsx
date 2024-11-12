@@ -3,9 +3,11 @@ import { useCart } from "../context/CartContext";
 import styles from "../styles/cart.module.scss";
 import { Link } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 const Cart = () => {
-  const { cartItems, removeItemFromCart, clearCart } = useCart();
+  const { cartItems, removeItemFromCart, clearCart, addItemToCart } = useCart();
   const [showCheckout, setShowCheckout] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
@@ -34,15 +36,37 @@ const Cart = () => {
     setShowCheckout(true);
   };
 
-  const handleConfirmPurchase = (e) => {
+  const handleConfirmPurchase = async (e) => {
     e.preventDefault();
     setPurchasedItems(cartItems);
     setIsLoading(true);
-    setTimeout(() => {
+
+    const order = {
+      buyer: {
+        name: e.target[0].value,
+        lastName: e.target[1].value,
+        phone: e.target[2].value,
+        email: e.target[3].value,
+      },
+      products: cartItems,
+      total: total,
+      timestamp: serverTimestamp(),
+    };
+
+    try {
+      // Agrega la compra a Firestore
+      const docRef = await addDoc(collection(db, "orders"), order);
+      console.log("Document written with ID: ", docRef.id);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        setShowReceipt(true);
+        clearCart();
+      }, 6000);
+    } catch (error) {
+      console.error("Error adding document: ", error);
       setIsLoading(false);
-      setShowReceipt(true);
-      clearCart();
-    }, 6000);
+    }
   };
 
   const receiptTotal = purchasedItems
@@ -84,8 +108,12 @@ const Cart = () => {
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             {isLoading ? (
-              <div>
-                <PropagateLoader color="#36d7b7" size={5} />
+              <div className={styles["spinner-container"]}>
+                <PropagateLoader
+                  color="#7defd8"
+                  size={20}
+                  speedMultiplier={1}
+                />
               </div>
             ) : showReceipt ? (
               <div className={styles.receiptContainer}>

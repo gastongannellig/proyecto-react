@@ -23,7 +23,7 @@ export const CartProvider = ({ children }) => {
 
         // Si se supera el stock, mostramos alerta y salimos
         if (totalQuantity > product.stock) {
-          toast.error("No hay suficiente stock disponible");
+          toast.error("There is not enough stock available");
           return prevItems;
         }
 
@@ -33,17 +33,17 @@ export const CartProvider = ({ children }) => {
           ...existingItem,
           quantity: totalQuantity,
         };
-        toast.success("Producto añadido al carrito");
+        toast.success("Product added to cart");
         return updatedItems;
       } else {
         // Si no existe en el carrito, verificamos si la cantidad inicial es válida
         if (quantity > product.stock) {
-          toast.error("No hay suficiente stock disponible");
+          toast.error("There is not enough stock available");
           return prevItems;
         }
 
         // Si hay stock suficiente, lo agregamos al carrito
-        toast.success("Producto añadido al carrito");
+        toast.success("Product added to cart");
         return [...prevItems, { ...product, quantity }];
       }
     });

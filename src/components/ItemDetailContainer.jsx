@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import mockProducts from "../assets/mockData.json";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase/config";
 import ItemDetail from "./ItemDetail";
 import { useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
+import styles from "../styles/itemlistcontainer.module.scss";
 
 const ItemDetailContainer = () => {
   const { id } = useParams();
@@ -12,26 +14,38 @@ const ItemDetailContainer = () => {
   useEffect(() => {
     setLoading(true);
 
-    const getProduct = new Promise((resolve) => {
-      setTimeout(() => {
-        const foundProduct = mockProducts.find(
-          (item) => item.id === parseInt(id)
-        );
-        resolve(foundProduct);
-      }, 2000);
-    });
+    const fetchProduct = async () => {
+      try {
+        const numericId = parseInt(id);
 
-    getProduct.then((result) => {
-      setProduct(result);
-      setLoading(false);
-    });
+        const q = query(
+          collection(db, "products"),
+          where("id", "==", numericId)
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const docData = querySnapshot.docs[0];
+          setProduct({ id: docData.id, ...docData.data() });
+        } else {
+          console.error("Product not found");
+        }
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    setTimeout(fetchProduct, 2000);
   }, [id]);
 
   return (
     <>
       {loading ? (
-        <div className="spinner-container">
-          <PropagateLoader color={"#36d7b7"} size={15} />
+        <div className={styles["spinner-container"]}>
+          <PropagateLoader color={"#7defd8"} size={15} />
         </div>
       ) : (
         <ItemDetail product={product} />

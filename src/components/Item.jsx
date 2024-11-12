@@ -26,7 +26,7 @@ const Item = ({ item }) => {
   return (
     <div className={styles.container}>
       <img src={item.pictureUrl} alt={item.title} />
-      <Link to={`/detail/${item.id}`} style={{ textDecoration: "none" }}>
+      <Link to={`/products/${item.id}`} style={{ textDecoration: "none" }}>
         <h2>{item.title}</h2>
       </Link>
       <span className={expanded ? styles.expanded : styles.collapsed}>
@@ -35,8 +35,7 @@ const Item = ({ item }) => {
       <button className={styles.toggleButton} onClick={toggleDescription}>
         {expanded ? "Read less" : "Read more"}
       </button>
-      <span>{item.price}</span>
-
+      <span>${item.price}</span>
       {!addedToCart ? (
         <ItemCount
           stock={item.stock}
